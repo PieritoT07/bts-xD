@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💜 Para ti | BTS 🌷</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh;
+        overflow-x: hidden;
+        font-family: "Trebuchet MS", sans-serif;
+        color: #72517f;
+        background: linear-gradient(135deg, #fff3fb, #f0e5ff, #fff6fa);
+        background-size: 300% 300%;
+        animation: fondo 12s ease infinite;
+    }
+
+    @keyframes fondo {
+        50% { background-position: 100% 100%; }
+    }
+
+    .fondo-decoracion {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .luz {
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: #e8c8ff66;
+        filter: blur(45px);
+    }
+
+    .luz:first-child { top: 10%; left: -60px; }
+    .luz:last-child { bottom: 5%; right: -60px; }
+
+    main {
+        position: relative;
+        z-index: 1;
+        width: min(100%, 850px);
+        margin: auto;
+        padding: 30px 14px 50px;
+        text-align: center;
+    }
+
+    .flor-titulo {
+        font-size: 52px;
+        animation: flotar 3s ease-in-out infinite;
+    }
+
+    h1 {
+        color: #9d65b9;
+        font-size: clamp(38px, 8vw, 60px);
+        text-shadow: 2px 3px white;
+        margin: 8px 0;
+    }
+
+    .subtitulo {
+        font-size: 17px;
+        line-height: 1.7;
+        margin-bottom: 25px;
+    }
+
+    .tarjeta {
+        background: #ffffffd9;
+        border: 3px solid white;
+        border-radius: 30px;
+        padding: 20px 12px 28px;
+        box-shadow: 0 12px 40px #9970b42b;
+    }
+
+    .mensaje {
+        font-size: 20px;
+        line-height: 1.7;
+        padding: 8px 5px 18px;
+    }
+
+    .mensaje strong {
+        display: block;
+        font-size: 29px;
+        color: #a16ac0;
+    }
+
+    /* DISTRIBUCIÓN DE LOS PERSONAJES */
+    .escenario {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(3, auto);
+        align-items: end;
+        justify-items: center;
+        max-width: 650px;
+        margin: 0 auto;
+        position: relative;
+        gap: 20px 10px;
+    }
+
+    .logo {
+        grid-column: 2;
+        grid-row: 2;
+        font-size: clamp(35px, 8vw, 58px);
+        font-weight: 1000;
+        letter-spacing: 4px;
+        color: #17151a;
+        text-shadow: 2px 3px #e8d7f4;
+        animation: logo-late 3s ease-in-out infinite;
+        z-index: 5;
+        align-self: center;
+    }
+
+    @keyframes logo-late {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.06); }
+    }
+
+    /* CONTENEDOR DEL PERSONAJE Y NOMBRE */
+    .grupo-personaje {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        width: 100%;
+    }
+
+    .personaje {
+        --cabello: #392b30;
+        --ropa: #416f9e;
+        --pantalon: #343341;
+        --piel: #ffe0cc;
+
+        position: relative;
+        width: 105px;
+        height: 150px;
+        cursor: pointer;
+        animation: flotar 3s ease-in-out infinite;
+        transform-origin: center bottom;
+    }
+
+    /* Retrasos para que floten desfasados */
+    .pos-rm .personaje { animation-delay: 0s; }
+    .pos-jin .personaje { animation-delay: -0.5s; }
+    .pos-suga .personaje { animation-delay: -1s; }
+    .pos-jhope .personaje { animation-delay: -0.8s; }
+    .pos-jimin .personaje { animation-delay: -1.3s; }
+    .pos-v .personaje { animation-delay: -0.3s; }
+    .pos-jk .personaje { animation-delay: -1.5s; }
+
+    @keyframes flotar {
+        0%, 100% { translate: 0 0; }
+        50% { translate: 0 -8px; }
+    }
+
+    /* CABEZA Y CARA */
+    .cabeza {
+        position: absolute;
+        width: 70px;
+        height: 66px;
+        left: 17px;
+        top: 28px;
+        background: var(--piel);
+        border-radius: 45% 45% 48% 48%;
+        border: 1px solid #e0b8b030;
+        z-index: 3;
+    }
+
+    .oreja {
+        position: absolute;
+        width: 14px;
+        height: 20px;
+        top: 48px;
+        background: var(--piel);
+        border-radius: 50%;
+        z-index: 2;
+    }
+
+    .oreja.izq { left: 12px; }
+    .oreja.der { right: 12px; }
+
+    /* PELO (Mejorado para parecer más al de la imagen) */
+    .pelo {
+        position: absolute;
+        top: -8px;
+        left: -4px;
+        width: 78px;
+        height: 45px;
+        background: var(--cabello);
+        border-radius: 50% 50% 30% 30%;
+        z-index: 4;
+    }
+
+    /* Flequillo */
+    .flequillo {
+        position: absolute;
+        top: 2px;
+        left: 20px;
+        width: 30px;
+        height: 32px;
+        background: var(--cabello);
+        border-radius: 10px 0 60% 40%;
+        transform: rotate(15deg);
+        z-index: 5;
+    }
+
+    /* Mechones laterales */
+    .pelo::before, .pelo::after {
+        content: "";
+        position: absolute;
+        top: 25px;
+        width: 22px;
+        height: 25px;
+        background: var(--cabello);
+    }
+    .pelo::before { left: 0; border-radius: 5px 3px 70% 20%; transform: rotate(10deg); }
+    .pelo::after { right: 0; border-radius: 3px 5px 20% 70%; transform: rotate(-10deg); }
+
+    /* OJOS ESTILO ANIME */
+    .ojos {
+        position: absolute;
+        top: 40px;
+        left: 14px;
+        width: 42px;
+        display: flex;
+        justify-content: space-between;
+        z-index: 6;
+    }
+
+    .ojo {
+        width: 10px;
+        height: 14px;
+        background: #2a1e24;
+        border-radius: 50%;
+        position: relative;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .ojo::after {
+        content: "";
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+    }
+
+    /* SONRISA TIERNA */
+    .sonrisa {
+        position: absolute;
+        top: 54px;
+        left: 30px;
+        width: 10px;
+        height: 5px;
+        border-bottom: 2px solid #9d5c69;
+        border-radius: 50%;
+        z-index: 7;
+    }
+
+    /* MEJILLAS */
+    .cachete {
+        position: absolute;
+        top: 50px;
+        width: 12px;
+        height: 6px;
+        background: #ff8fa3;
+        border-radius: 50%;
+        opacity: 0.6;
+        z-index: 6;
+        filter: blur(0.5px);
+    }
+
+    .cachete.izq { left: 4px; }
+    .cachete.der { right: 4px; }
+
+    /* CUERPO */
+    .cuello {
+        position: absolute;
+        top: 88px;
+        left: 45px;
+        width: 15px;
+        height: 10px;
+        background: var(--piel);
+        z-index: 1;
+    }
+
+    .torso {
+        position: absolute;
+        top: 92px;
+        left: 25px;
+        width: 55px;
+        height: 45px;
+        background: var(--ropa);
+        border-radius: 15px 15px 9px 9px;
+        border: 1px solid #5e416522;
+        z-index: 3;
+    }
+
+    /* Detalle en la ropa */
+    .torso::after {
+        content: "✦";
+        position: absolute;
+        left: 22px;
+        top: 8px;
+        font-size: 12px;
+        color: #fff0ce;
+    }
+
+    /* BRAZOS */
+    .brazo {
+        position: absolute;
+        top: 96px;
+        width: 16px;
+        height: 38px;
+        border-radius: 10px;
+        background: var(--ropa);
+        z-index: 2;
+    }
+
+    .brazo.izq { left: 13px; transform: rotate(18deg); }
+    .brazo.der { right: 13px; transform: rotate(-20deg); }
+
+    .mano {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--piel);
+        top: 125px;
+        z-index: 4;
+    }
+
+    .mano.izq { left: 9px; }
+    .mano.der { right: 9px; }
+
+    /* PIERNAS (Ajustadas para que parezcan sentados o de pie) */
+    .piernas-container {
+        position: absolute;
+        top: 130px;
+        width: 100%;
+        height: 30px;
+        z-index: 2;
+    }
+
+    .pierna {
+        position: absolute;
+        width: 20px;
+        height: 22px;
+        background: var(--pantalon);
+        border-radius: 5px 5px 8px 8px;
+    }
+
+    .pierna.izq { left: 28px; transform: rotate(5deg); }
+    .pierna.der { left: 55px; transform: rotate(-5deg); }
+
+    .zapato {
+        position: absolute;
+        top: 145px;
+        width: 26px;
+        height: 11px;
+        background: white;
+        border-radius: 10px;
+        z-index: 3;
+    }
+
+    .zapato.izq { left: 24px; }
+    .zapato.der { left: 53px; }
+
+    /* PELUCHES/ACCESORIOS */
+    .peluche {
+        position: absolute;
+        bottom: 0px;
+        right: -25px;
+        font-size: 30px;
+        z-index: 8;
+        animation: saltito-peluche 2s ease-in-out infinite;
+        filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+    }
+
+    @keyframes saltito-peluche {
+        0%, 100% { transform: translateY(0) rotate(5deg); }
+        50% { transform: translateY(-6px) rotate(-5deg); }
+    }
+
+    /* NOMBRES */
+    .nombre {
+        margin-top: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #7b5792;
+        background: #f3e8ff;
+        padding: 4px 14px;
+        border-radius: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        z-index: 10;
+        transition: 0.3s;
+        border: 2px solid #fff;
+    }
+
+    .grupo-personaje:hover .nombre {
+        background: #e3c1f7;
+        color: #fff;
+        transform: scale(1.1);
+    }
+
+    /* POSICIONES DEL GRID */
+    .pos-rm { grid-column: 1; grid-row: 1; }
+    .pos-jin { grid-column: 3; grid-row: 1; }
+    .pos-suga { grid-column: 1; grid-row: 2; }
+    .pos-jhope { grid-column: 3; grid-row: 2; }
+    .pos-jimin { grid-column: 1; grid-row: 3; }
+    .pos-v { grid-column: 2; grid-row: 3; }
+    .pos-jk { grid-column: 3; grid-row: 3; }
+
+    .personaje:hover {
+        animation: saltito .5s ease;
+    }
+
+    @keyframes saltito {
+        0%, 100% { transform: translateY(0) rotate(0); }
+        50% { transform: translateY(-15px) rotate(6deg); }
+    }
+
+    /* ESTILOS ESPECÍFICOS (Colores de la imagen) */
+    /* RM: Pelo castaño, traje azul, koala azul */
+    .rm { --cabello: #b86f4d; --ropa: #4c9caa; --pantalon: #3a4859; }
+    /* Jin: Pelo negro, traje azul oscuro, perro blanco */
+    .jin { --cabello: #1f1d22; --ropa: #2b3d5c; --pantalon: #30303b; }
+    /* Suga: Pelo rojo, suéter de rayas, peluche rosa */
+    .suga { --cabello: #c92f48; --ropa: #e8b841; --pantalon: #373747; }
+    /* J-Hope: Pelo azul, chaqueta roja, peluche marrón */
+    .jhope { --cabello: #65bfe0; --ropa: #b84454; --pantalon: #42485b; }
+    /* Jimin: Pelo rubio, chaqueta celeste, perro amarillo */
+    .jimin { --cabello: #e9bd49; --ropa: #66c1c5; --pantalon: #45536d; }
+    /* V: Pelo castaño, camisa beige, conejo rosa */
+    .v { --cabello: #7b4e33; --ropa: #f0d8bb; --pantalon: #534252; }
+    /* Jungkook: Pelo verde, traje gris, corazón rojo */
+    .jungkook { --cabello: #465b4e; --ropa: #697e79; --pantalon: #333d4b; }
+
+    /* BOTONES Y NOTA */
+    .botones {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    button {
+        border: none;
+        border-radius: 25px;
+        padding: 13px 18px;
+        background: linear-gradient(135deg, #e3c1f7, #f8d0e9);
+        color: #68457c;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 5px 12px #9d70b433;
+        transition: .25s;
+    }
+
+    button:hover {
+        transform: translateY(-3px) scale(1.03);
+    }
+
+    #nota {
+        display: none;
+        margin-top: 22px;
+        padding: 18px;
+        border: 2px dashed #d4a5ec;
+        border-radius: 20px;
+        background: #fff5fd;
+        font-size: 18px;
+        line-height: 1.8;
+    }
+
+    .final {
+        margin-top: 20px;
+        font-size: 15px;
+    }
+
+    .particula {
+        position: fixed;
+        top: -40px;
+        z-index: 999;
+        pointer-events: none;
+        animation: caer linear forwards;
+    }
+
+    @keyframes caer {
+        to {
+            transform: translateY(110vh) rotate(400deg);
+            opacity: 0;
+        }
+    }
+
+    /* Ajustes para móviles */
+    @media (max-width: 500px) {
+        main { padding: 22px 8px; }
+        .tarjeta { padding: 12px 4px 22px; }
+        .escenario {
+            grid-template-rows: repeat(3, auto);
+            gap: 15px 5px;
+        }
+        .personaje {
+            transform: scale(.85);
+            margin: -10px 0;
+        }
+        .nombre { font-size: 13px; padding: 2px 8px; }
+        .mensaje { font-size: 17px; }
+        .logo { font-size: 30px; }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="fondo-decoracion">
+    <div class="luz"></div>
+    <div class="luz"></div>
+</div>
+
+<main>
+    <div class="flor-titulo">💜🌷💜</div>
+    <h1>Para ti</h1>
+    <p class="subtitulo">
+        Un pequeño detalle lleno de flores y cariño 🌸
+    </p>
+
+    <section class="tarjeta">
+
+        <div class="mensaje">
+            <strong>espero te guste lo hice con esfuerzo xD 💜</strong>
+            Siete personitas, muchas flores
+            y un poquito de magia para alegrarte el día. 🌷
+        </div>
+
+        <div class="escenario">
+
+            <!-- RM -->
+            <div class="grupo-personaje pos-rm">
+                <div class="personaje rm" onclick="reaccion(this)">
+                    <div class="oreja izq"></div><div class="oreja der"></div>
+                    <div class="cabeza">
+                        <div class="pelo"></div><div class="flequillo"></div>
+                        <div class="ojos"><i class="ojo"></i><i class="ojo"></i></div>
+                        <div class="cachete izq"></div><div class="cachete der"></div>
+                        <div class="sonrisa"></div>
+                    </div>
+                    <div class="cuello"></div><div class="torso"></div>
+                    <div class="brazo izq"></div><div class="brazo der"></div>
+                    <div class="mano izq"></div><div class="mano der"></div>
+                    <div class="piernas-container"><div class="pierna izq"></div><div class="pierna der"></div></div>
+                    <div class="zapato izq"></div><div class="zapato der"></div>
+                    <div class="peluche">🐨</div>
+                </div>
+                <div class="nombre">RM</div>
+            </div>
+
+            <!-- JIN -->
+            <div class="grupo-personaje pos-jin">
+                <div class="personaje jin" onclick="reaccion(this)">
+                    <div class="oreja izq"></div><div class="oreja der"></div>
+                    <div class="cabeza">
+                        <div class="pelo"></div><div class="flequillo"></div>
+                        <div class="ojos"><i class="ojo"></i><i class="ojo"></i></div>
+                        <div class="cachete izq"></div><div class="cachete der"></div>
+                        <div class="sonrisa"></div>
+                    </div>
+                    <div class="cuello"></div><div class="torso"></div>
+                    <div class="brazo izq"></div><div class="brazo der"></div>
+                    <div class="mano izq"></div><div class="mano der"></div>
+                    <div class="piernas-container"><div class="pierna izq"></div><div class="pierna der"></div></div>
+                    <div class="zapato izq"></div><div class="zapato der"></div>
+                    <div class="peluche">🐶</div>
+                </div>
+                <div class="nombre">Jin</div>
+            </div>
+
+            <!-- SUGA -->
+            <div class="grupo-personaje pos-suga">
+                <div class="personaje suga" onclick="reaccion(this)">
+                    <div class="oreja izq"></div><div class="oreja der"></div>
+                    <div class="cabeza">
+                        <div class="pelo"></div><div class="flequillo"></div>
+                        <div class="ojos"><i class="ojo"></i><i class="ojo"></i></div>
+                        <div class="cachete izq"></div><div class="cachete der"></div>
+                        <div class="sonrisa"></div>
+                    </div>
+                    <div class="cuello"></div><div class="torso"></div>
+                    <div class="brazo izq"></div><div class="brazo der"></div>
+                    <div class="mano izq"></div><div class="mano der"></div>
+                    <div class="piernas-container"><div class="pierna izq"></div><div class="pierna der"></div></div>
+                    <div class="zapato izq"></div><div class="zapato der"></div>
+                    <div class="peluche">🐱</div>
+                </div>
+                <div class="nombre">Suga</div>
+            </div>
+
+            <!-- LOGO -->
+            <div class="logo">BTS</div>
+
+            <!-- J-HOPE -->
+            <div class="grupo-personaje pos-jhope">
+                <div class="personaje jhope" onclick="reaccion(this)">
+                    <div class="oreja izq"></div><div class="oreja der"></div>
+                    <div class="cabeza">
+                        <div class="pelo"></div><div class="flequillo"></div>
+                        <div class="ojos"><i class="ojo"></i><i class="ojo"></i></div>
+                        <div class="cachete izq"></div><div class="cachete der"></div>
+                        <div class="sonrisa"></div>
+                    </div>
+                    <div class="cuello"></div><div class="torso"></div>
+                    <div class="brazo izq"></div><div class="brazo der"></div>
+                    <div class="mano izq"></div><div class="mano der"></div>
+                    <div class="piernas-container"><div class="pierna izq"></div><div class="pierna der"></div></div>
+                    <div class="zapato izq"></div><div class="zapato der"></div>
+                    <div class="peluche">🐿️</div>
+                </div>
+                <div class="nombre">J-Hope</div>
+            </div>
+
+            <!-- JIMIN -->
+            <div class="grupo-personaje pos-jimin">
+                <div class="personaje jimin" onclick="reaccion(this)">
+                    <div class="oreja izq"></div><div class="oreja der"></div>
+                    <div class="cabeza">
+                        <div class="pelo"></div><div class="flequillo"></div>
+                        <div class="ojos"><i class="ojo"></i><i class="ojo"></i></div>
+                        <div class="cachete izq"></div><div class="cachete der"></div>
+                        <div class="sonrisa"></div>
+                    </div>
+                    <div class="cuello"></div><div class="torso"></div>
+                    <div class="brazo izq"></div><div class="brazo der"></div>
+                    <div class="mano izq"></div><div class="mano der"></div>
+                    <div class="piernas-container"><div class="pierna izq"></div><div class="pierna der"></div></div>
+                    <div class="zapato izq"></div><div class="zapato der"></div>
+                    <div class="peluche">🐶</div>
+                </div>
+                <div class="nombre">Jimin</div>
+            </div>
+
+            <!-- V -->
+            <div class="grupo-personaje pos-v">
+                <div class="personaje v" onclick="reaccion(this)">
+                    <div class="oreja izq"></div><div class="oreja der"></div>
+                    <div class="cabeza">
+                        <div class="pelo"></div><div class="flequillo"></div>
+                        <div class="ojos"><i class="ojo"></i><i class="ojo"></i></div>
+                        <div class="cachete izq"></div><div class="cachete der"></div>
+                        <div class="sonrisa"></div>
+                    </div>
+                    <div class="cuello"></div><div class="torso"></div>
+                    <div class="brazo izq"></div><div class="brazo der"></div>
+                    <div class="mano izq"></div><div class="mano der"></div>
+                    <div class="piernas-container"><div class="pierna izq"></div><div class="pierna der"></div></div>
+                    <div class="zapato izq"></div><div class="zapato der"></div>
+                    <div class="peluche">🐰</div>
+                </div>
+                <div class="nombre">V</div>
+            </div>
+
+            <!-- JUNGKOOK -->
+            <div class="grupo-personaje pos-jk">
+                <div class="personaje jungkook" onclick="reaccion(this)">
+                    <div class="oreja izq"></div><div class="oreja der"></div>
+                    <div class="cabeza">
+                        <div class="pelo"></div><div class="flequillo"></div>
+                        <div class="ojos"><i class="ojo"></i><i class="ojo"></i></div>
+                        <div class="cachete izq"></div><div class="cachete der"></div>
+                        <div class="sonrisa"></div>
+                    </div>
+                    <div class="cuello"></div><div class="torso"></div>
+                    <div class="brazo izq"></div><div class="brazo der"></div>
+                    <div class="mano izq"></div><div class="mano der"></div>
+                    <div class="piernas-container"><div class="pierna izq"></div><div class="pierna der"></div></div>
+                    <div class="zapato izq"></div><div class="zapato der"></div>
+                    <div class="peluche">❤️</div>
+                </div>
+                <div class="nombre">Jungkook</div>
+            </div>
+
+        </div>
+
+        <div class="botones">
+            <button onclick="flores()">🌸 Lluvia de flores</button>
+            <button onclick="nota()">💌 Abrir mensajito</button>
+            <button onclick="corazones()">💜 Enviar cariño</button>
+        </div>
+
+        <div id="nota">
+            🌷💜 Este pequeño detalle es para ti. 💜🌷
+            <br><br>
+            Que tus días estén llenos de cosas bonitas,
+            sonrisas sinceras y canciones que abracen
+            el corazón.
+            <br><br>
+            Nunca te rindas :3 💜✨
+        </div>
+
+        <p class="final">
+            Hecho con cariño para ti 🌸💜
+        </p>
+
+    </section>
+</main>
+
+<script>
+function reaccion(personaje) {
+    personaje.animate([
+        { transform: "translateY(0) scale(1)" },
+        { transform: "translateY(-20px) scale(1.12) rotate(5deg)" },
+        { transform: "translateY(0) scale(1)" }
+    ], {
+        duration: 650,
+        easing: "ease-out"
+    });
+
+    corazones();
+}
+
+function crearParticulas(simbolos, cantidad) {
+    for (let i = 0; i < cantidad; i++) {
+        const elemento = document.createElement("div");
+        elemento.className = "particula";
+        elemento.textContent =
+            simbolos[Math.floor(Math.random() * simbolos.length)];
+
+        elemento.style.left = Math.random() * 100 + "vw";
+        elemento.style.fontSize = (18 + Math.random() * 20) + "px";
+        elemento.style.animationDuration = (3 + Math.random() * 4) + "s";
+        elemento.style.animationDelay = Math.random() * 1.5 + "s";
+
+        document.body.appendChild(elemento);
+
+        setTimeout(() => elemento.remove(), 9000);
+    }
+}
+
+function flores() {
+    crearParticulas(["🌷", "🌸", "🌼", "🌺", "💐"], 35);
+}
+
+function corazones() {
+    crearParticulas(["💜", "💗", "💕", "💖", "✨"], 25);
+}
+
+function nota() {
+    const mensaje = document.getElementById("nota");
+
+    if (getComputedStyle(mensaje).display === "none") {
+        mensaje.style.display = "block";
+        corazones();
+        flores();
+    } else {
+        mensaje.style.display = "none";
+    }
+}
+
+// Pequeñas flores cayendo continuamente.
+setInterval(() => {
+    crearParticulas(["🌸", "🌷", "✨"], 1);
+}, 1500);
+</script>
+
+</body>
+</html>
